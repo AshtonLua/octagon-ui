@@ -430,7 +430,16 @@ function CustomUILib:CreateWindow(title)
         
         -- Select first tab by default
         if #Tabs == 1 then
-            TabButton.MouseButton1Click:Fire()
+            -- Manually trigger the tab selection logic instead of using :Fire()
+            -- Deselect current tab (none in this case)
+            -- Select new tab
+            SelectedTab = Tab
+            local tabName = TabButton:FindFirstChild("Name")
+            
+            TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.AccentPrimary}):Play()
+            TweenService:Create(tabName, TweenInfo.new(0.2), {TextColor3 = LibTheme.TextPrimary}):Play()
+            TabIndicator.Visible = true
+            TabContent.Visible = true
         end
         
         -- Section Creation Function

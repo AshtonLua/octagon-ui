@@ -124,6 +124,44 @@ function CustomUILib:CreateWindow(title)
     local Window = {}
     local LibTheme = self.Theme -- Store theme reference locally
     
+    -- Create ScreenGui to hold the UI
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "CustomUILib"
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    
+    -- Try to parent to PlayerGui first, fallback to other options
+    local success = pcall(function()
+        ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    end)
+    
+    if not success then
+        -- Try CoreGui
+        success = pcall(function()
+            ScreenGui.Parent = game:GetService("CoreGui")
+        end)
+        
+        -- If still not successful, try other options
+        if not success then
+            -- Try current script's parent
+            if script.Parent then
+                ScreenGui.Parent = script.Parent
+            else
+                -- Last resort, parent to workspace (not ideal but visible)
+                local part = Instance.new("Part")
+                part.Transparency = 1
+                part.Anchored = true
+                part.CanCollide = false
+                part.Position = Vector3.new(0, 100, 0)
+                part.Parent = workspace
+                
+                local SurfaceGui = Instance.new("SurfaceGui")
+                SurfaceGui.Parent = part
+                ScreenGui.Parent = SurfaceGui
+            end
+        end
+    end
+    
     -- Main Window Frame
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"
@@ -131,7 +169,7 @@ function CustomUILib:CreateWindow(title)
     MainFrame.Position = UDim2.new(0.5, -300, 0.5, -200)
     MainFrame.BackgroundColor3 = LibTheme.BackgroundPrimary
     MainFrame.BorderSizePixel = 0
-    MainFrame.Parent = game.CoreGui
+    MainFrame.Parent = ScreenGui
     
     -- Add Corner Radius
     local Corner = Instance.new("UICorner")
@@ -284,7 +322,7 @@ function CustomUILib:CreateWindow(title)
     end)
     
     CloseBtn.MouseButton1Click:Connect(function()
-        MainFrame:Destroy()
+        ScreenGui:Destroy()
     end)
     
     -- Tabs System
@@ -1478,7 +1516,7 @@ function CustomUILib:CreateWindow(title)
         NotificationContainer.BackgroundColor3 = LibTheme.BackgroundSecondary
         NotificationContainer.BorderSizePixel = 0
         NotificationContainer.ZIndex = LibTheme.ZIndexOrder.Notification
-        NotificationContainer.Parent = game.CoreGui
+        NotificationContainer.Parent = ScreenGui
         
         -- Notification Container Corner Radius
         local NotificationContainerCorner = Instance.new("UICorner")
@@ -1620,6 +1658,32 @@ function CustomUILib:CreateWindow(title)
         
         return NotificationContainer
     end
+    
+    -- Toggle UI Visibility
+    local UIVisible = true
+    
+    -- Add keybind to toggle UI visibility
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if not gameProcessed and input.KeyCode == Enum.KeyCode.RightControl then
+            UIVisible = not UIVisible
+            ScreenGui.Enabled = UIVisible
+        end
+    end)
+    
+    -- Add method to toggle UI visibility
+    function Window:ToggleVisibility()
+        UIVisible = not UIVisible
+        ScreenGui.Enabled = UIVisible
+    end
+    
+    -- Add method to set UI visibility
+    function Window:SetVisibility(visible)
+        UIVisible = visible
+        ScreenGui.Enabled = visible
+    end
+    
+    -- Return the ScreenGui for reference
+    Window.ScreenGui = ScreenGui
     
     return Window
 end

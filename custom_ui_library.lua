@@ -25,7 +25,7 @@ local function fromHex(hex)
 end
 
 -- Theme Definition
-CustomUILib.Theme = {
+local Theme = {
     -- Primary Colors
     BackgroundPrimary = fromHex("#373a56"),  -- RGB: 55, 58, 86
     AccentPrimary = fromHex("#7e23bd"),      -- RGB: 126, 35, 189
@@ -69,6 +69,9 @@ CustomUILib.Theme = {
         Modal = 1500
     }
 }
+
+-- Assign theme to library
+CustomUILib.Theme = Theme
 
 -- Library Structure
 CustomUILib.Windows = {}
@@ -119,13 +122,14 @@ end
 -- Create Window Function
 function CustomUILib:CreateWindow(title)
     local Window = {}
+    local LibTheme = self.Theme -- Store theme reference locally
     
     -- Main Window Frame
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"
     MainFrame.Size = UDim2.new(0, 600, 0, 400)
     MainFrame.Position = UDim2.new(0.5, -300, 0.5, -200)
-    MainFrame.BackgroundColor3 = self.Theme.BackgroundPrimary
+    MainFrame.BackgroundColor3 = LibTheme.BackgroundPrimary
     MainFrame.BorderSizePixel = 0
     MainFrame.Parent = game.CoreGui
     
@@ -141,7 +145,7 @@ function CustomUILib:CreateWindow(title)
     Shadow.BackgroundTransparency = 1
     Shadow.Position = UDim2.new(0.5, 0, 0.5, 0)
     Shadow.Size = UDim2.new(1, 30, 1, 30)
-    Shadow.ZIndex = self.Theme.ZIndexOrder.Window - 1
+    Shadow.ZIndex = LibTheme.ZIndexOrder.Window - 1
     Shadow.Image = "rbxassetid://5554236805"
     Shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
     Shadow.ImageTransparency = 0.6
@@ -153,7 +157,7 @@ function CustomUILib:CreateWindow(title)
     local Topbar = Instance.new("Frame")
     Topbar.Name = "Topbar"
     Topbar.Size = UDim2.new(1, 0, 0, 40)
-    Topbar.BackgroundColor3 = self.Theme.BackgroundSecondary
+    Topbar.BackgroundColor3 = LibTheme.BackgroundSecondary
     Topbar.BorderSizePixel = 0
     Topbar.Parent = MainFrame
     
@@ -167,7 +171,7 @@ function CustomUILib:CreateWindow(title)
     TopbarFix.Name = "TopbarFix"
     TopbarFix.Size = UDim2.new(1, 0, 0.5, 0)
     TopbarFix.Position = UDim2.new(0, 0, 0.5, 0)
-    TopbarFix.BackgroundColor3 = self.Theme.BackgroundSecondary
+    TopbarFix.BackgroundColor3 = LibTheme.BackgroundSecondary
     TopbarFix.BorderSizePixel = 0
     TopbarFix.Parent = Topbar
     
@@ -178,9 +182,9 @@ function CustomUILib:CreateWindow(title)
     Title.Position = UDim2.new(0, 15, 0, 0)
     Title.BackgroundTransparency = 1
     Title.Text = title
-    Title.TextColor3 = self.Theme.TextPrimary
-    Title.TextSize = self.Theme.FontSizeHeader
-    Title.Font = self.Theme.Font
+    Title.TextColor3 = LibTheme.TextPrimary
+    Title.TextSize = LibTheme.FontSizeHeader
+    Title.Font = LibTheme.Font
     Title.TextXAlignment = Enum.TextXAlignment.Left
     Title.Parent = Topbar
     
@@ -189,11 +193,11 @@ function CustomUILib:CreateWindow(title)
     CloseBtn.Name = "CloseButton"
     CloseBtn.Size = UDim2.new(0, 30, 0, 30)
     CloseBtn.Position = UDim2.new(1, -35, 0, 5)
-    CloseBtn.BackgroundColor3 = self.Theme.Error
+    CloseBtn.BackgroundColor3 = LibTheme.Error
     CloseBtn.Text = "X"
-    CloseBtn.TextColor3 = self.Theme.TextPrimary
-    CloseBtn.TextSize = self.Theme.FontSizeBody
-    CloseBtn.Font = self.Theme.Font
+    CloseBtn.TextColor3 = LibTheme.TextPrimary
+    CloseBtn.TextSize = LibTheme.FontSizeBody
+    CloseBtn.Font = LibTheme.Font
     CloseBtn.AutoButtonColor = false
     CloseBtn.Parent = Topbar
     
@@ -207,7 +211,7 @@ function CustomUILib:CreateWindow(title)
     ContentContainer.Name = "ContentContainer"
     ContentContainer.Size = UDim2.new(1, 0, 1, -40)
     ContentContainer.Position = UDim2.new(0, 0, 0, 40)
-    ContentContainer.BackgroundColor3 = self.Theme.BackgroundPrimary
+    ContentContainer.BackgroundColor3 = LibTheme.BackgroundPrimary
     ContentContainer.BorderSizePixel = 0
     ContentContainer.Parent = MainFrame
     
@@ -215,7 +219,7 @@ function CustomUILib:CreateWindow(title)
     local TabsContainer = Instance.new("Frame")
     TabsContainer.Name = "TabsContainer"
     TabsContainer.Size = UDim2.new(0, 150, 1, 0)
-    TabsContainer.BackgroundColor3 = self.Theme.BackgroundSecondary
+    TabsContainer.BackgroundColor3 = LibTheme.BackgroundSecondary
     TabsContainer.BorderSizePixel = 0
     TabsContainer.Parent = ContentContainer
     
@@ -229,7 +233,7 @@ function CustomUILib:CreateWindow(title)
     TabsContainerFix.Name = "TabsContainerFix"
     TabsContainerFix.Size = UDim2.new(0.5, 0, 1, 0)
     TabsContainerFix.Position = UDim2.new(0.5, 0, 0, 0)
-    TabsContainerFix.BackgroundColor3 = self.Theme.BackgroundSecondary
+    TabsContainerFix.BackgroundColor3 = LibTheme.BackgroundSecondary
     TabsContainerFix.BorderSizePixel = 0
     TabsContainerFix.Parent = TabsContainer
     
@@ -240,7 +244,7 @@ function CustomUILib:CreateWindow(title)
     TabsList.BackgroundTransparency = 1
     TabsList.BorderSizePixel = 0
     TabsList.ScrollBarThickness = 2
-    TabsList.ScrollBarImageColor3 = self.Theme.AccentPrimary
+    TabsList.ScrollBarImageColor3 = LibTheme.AccentPrimary
     TabsList.CanvasSize = UDim2.new(0, 0, 0, 0)
     TabsList.AutomaticCanvasSize = Enum.AutomaticSize.Y
     TabsList.Parent = TabsContainer
@@ -276,7 +280,7 @@ function CustomUILib:CreateWindow(title)
     end)
     
     CloseBtn.MouseLeave:Connect(function()
-        TweenService:Create(CloseBtn, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.Error}):Play()
+        TweenService:Create(CloseBtn, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.Error}):Play()
     end)
     
     CloseBtn.MouseButton1Click:Connect(function()
@@ -294,7 +298,7 @@ function CustomUILib:CreateWindow(title)
         local TabButton = Instance.new("TextButton")
         TabButton.Name = name .. "Tab"
         TabButton.Size = UDim2.new(1, 0, 0, 40)
-        TabButton.BackgroundColor3 = self.Theme.BackgroundSecondary
+        TabButton.BackgroundColor3 = LibTheme.BackgroundSecondary
         TabButton.BorderSizePixel = 0
         TabButton.Text = ""
         TabButton.AutoButtonColor = false
@@ -322,9 +326,9 @@ function CustomUILib:CreateWindow(title)
             TabName.Position = UDim2.new(0, 40, 0, 0)
             TabName.BackgroundTransparency = 1
             TabName.Text = name
-            TabName.TextColor3 = self.Theme.TextSecondary
-            TabName.TextSize = self.Theme.FontSizeBody
-            TabName.Font = self.Theme.Font
+            TabName.TextColor3 = LibTheme.TextSecondary
+            TabName.TextSize = LibTheme.FontSizeBody
+            TabName.Font = LibTheme.Font
             TabName.TextXAlignment = Enum.TextXAlignment.Left
             TabName.Parent = TabButton
         else
@@ -335,9 +339,9 @@ function CustomUILib:CreateWindow(title)
             TabName.Position = UDim2.new(0, 10, 0, 0)
             TabName.BackgroundTransparency = 1
             TabName.Text = name
-            TabName.TextColor3 = self.Theme.TextSecondary
-            TabName.TextSize = self.Theme.FontSizeBody
-            TabName.Font = self.Theme.Font
+            TabName.TextColor3 = LibTheme.TextSecondary
+            TabName.TextSize = LibTheme.FontSizeBody
+            TabName.Font = LibTheme.Font
             TabName.TextXAlignment = Enum.TextXAlignment.Left
             TabName.Parent = TabButton
         end
@@ -347,7 +351,7 @@ function CustomUILib:CreateWindow(title)
         TabIndicator.Name = "Indicator"
         TabIndicator.Size = UDim2.new(0, 3, 0.7, 0)
         TabIndicator.Position = UDim2.new(0, 0, 0.15, 0)
-        TabIndicator.BackgroundColor3 = self.Theme.AccentPrimary
+        TabIndicator.BackgroundColor3 = LibTheme.AccentPrimary
         TabIndicator.BorderSizePixel = 0
         TabIndicator.Visible = false
         TabIndicator.Parent = TabButton
@@ -359,7 +363,7 @@ function CustomUILib:CreateWindow(title)
         TabContent.BackgroundTransparency = 1
         TabContent.BorderSizePixel = 0
         TabContent.ScrollBarThickness = 2
-        TabContent.ScrollBarImageColor3 = self.Theme.AccentPrimary
+        TabContent.ScrollBarImageColor3 = LibTheme.AccentPrimary
         TabContent.CanvasSize = UDim2.new(0, 0, 0, 0)
         TabContent.AutomaticCanvasSize = Enum.AutomaticSize.Y
         TabContent.Visible = false
@@ -382,13 +386,13 @@ function CustomUILib:CreateWindow(title)
         -- Tab Button Functionality
         TabButton.MouseEnter:Connect(function()
             if TabContent.Visible == false then
-                TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.BackgroundTertiary}):Play()
+                TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.BackgroundTertiary}):Play()
             end
         end)
         
         TabButton.MouseLeave:Connect(function()
             if TabContent.Visible == false then
-                TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.BackgroundSecondary}):Play()
+                TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.BackgroundSecondary}):Play()
             end
         end)
         
@@ -400,8 +404,8 @@ function CustomUILib:CreateWindow(title)
                 local prevTabIndicator = prevTabButton.Indicator
                 local prevTabName = prevTabButton:FindFirstChild("Name")
                 
-                TweenService:Create(prevTabButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.BackgroundSecondary}):Play()
-                TweenService:Create(prevTabName, TweenInfo.new(0.2), {TextColor3 = self.Theme.TextSecondary}):Play()
+                TweenService:Create(prevTabButton, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.BackgroundSecondary}):Play()
+                TweenService:Create(prevTabName, TweenInfo.new(0.2), {TextColor3 = LibTheme.TextSecondary}):Play()
                 prevTabIndicator.Visible = false
                 prevTabContent.Visible = false
             end
@@ -410,8 +414,8 @@ function CustomUILib:CreateWindow(title)
             SelectedTab = Tab
             local tabName = TabButton:FindFirstChild("Name")
             
-            TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.AccentPrimary}):Play()
-            TweenService:Create(tabName, TweenInfo.new(0.2), {TextColor3 = self.Theme.TextPrimary}):Play()
+            TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.AccentPrimary}):Play()
+            TweenService:Create(tabName, TweenInfo.new(0.2), {TextColor3 = LibTheme.TextPrimary}):Play()
             TabIndicator.Visible = true
             TabContent.Visible = true
         end)
@@ -437,7 +441,7 @@ function CustomUILib:CreateWindow(title)
             local SectionContainer = Instance.new("Frame")
             SectionContainer.Name = sectionName .. "Section"
             SectionContainer.Size = UDim2.new(1, 0, 0, 40) -- Will be automatically resized
-            SectionContainer.BackgroundColor3 = self.Theme.BackgroundSecondary
+            SectionContainer.BackgroundColor3 = LibTheme.BackgroundSecondary
             SectionContainer.BorderSizePixel = 0
             SectionContainer.AutomaticSize = Enum.AutomaticSize.Y
             SectionContainer.Parent = TabContent
@@ -462,9 +466,9 @@ function CustomUILib:CreateWindow(title)
             SectionTitle.Position = UDim2.new(0, 10, 0, 0)
             SectionTitle.BackgroundTransparency = 1
             SectionTitle.Text = sectionName
-            SectionTitle.TextColor3 = self.Theme.TextPrimary
-            SectionTitle.TextSize = self.Theme.FontSizeSubheader
-            SectionTitle.Font = self.Theme.Font
+            SectionTitle.TextColor3 = LibTheme.TextPrimary
+            SectionTitle.TextSize = LibTheme.FontSizeSubheader
+            SectionTitle.Font = LibTheme.Font
             SectionTitle.TextXAlignment = Enum.TextXAlignment.Left
             SectionTitle.Parent = SectionHeader
             
@@ -507,12 +511,12 @@ function CustomUILib:CreateWindow(title)
                 local Button = Instance.new("TextButton")
                 Button.Name = "Button"
                 Button.Size = UDim2.new(1, 0, 1, 0)
-                Button.BackgroundColor3 = self.Theme.AccentPrimary
+                Button.BackgroundColor3 = LibTheme.AccentPrimary
                 Button.BorderSizePixel = 0
                 Button.Text = buttonText
-                Button.TextColor3 = self.Theme.TextPrimary
-                Button.TextSize = self.Theme.FontSizeBody
-                Button.Font = self.Theme.Font
+                Button.TextColor3 = LibTheme.TextPrimary
+                Button.TextSize = LibTheme.FontSizeBody
+                Button.Font = LibTheme.Font
                 Button.AutoButtonColor = false
                 Button.Parent = ButtonContainer
                 
@@ -523,19 +527,19 @@ function CustomUILib:CreateWindow(title)
                 
                 -- Button Functionality
                 Button.MouseEnter:Connect(function()
-                    TweenService:Create(Button, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.AccentSecondary}):Play()
+                    TweenService:Create(Button, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.AccentSecondary}):Play()
                 end)
                 
                 Button.MouseLeave:Connect(function()
-                    TweenService:Create(Button, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.AccentPrimary}):Play()
+                    TweenService:Create(Button, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.AccentPrimary}):Play()
                 end)
                 
                 Button.MouseButton1Down:Connect(function()
-                    TweenService:Create(Button, TweenInfo.new(0.1), {BackgroundColor3 = self.Theme.AccentTertiary, Size = UDim2.new(0.98, 0, 0.98, 0), Position = UDim2.new(0.01, 0, 0.01, 0)}):Play()
+                    TweenService:Create(Button, TweenInfo.new(0.1), {BackgroundColor3 = LibTheme.AccentTertiary, Size = UDim2.new(0.98, 0, 0.98, 0), Position = UDim2.new(0.01, 0, 0.01, 0)}):Play()
                 end)
                 
                 Button.MouseButton1Up:Connect(function()
-                    TweenService:Create(Button, TweenInfo.new(0.1), {BackgroundColor3 = self.Theme.AccentSecondary, Size = UDim2.new(1, 0, 1, 0), Position = UDim2.new(0, 0, 0, 0)}):Play()
+                    TweenService:Create(Button, TweenInfo.new(0.1), {BackgroundColor3 = LibTheme.AccentSecondary, Size = UDim2.new(1, 0, 1, 0), Position = UDim2.new(0, 0, 0, 0)}):Play()
                 end)
                 
                 Button.MouseButton1Click:Connect(function()
@@ -564,9 +568,9 @@ function CustomUILib:CreateWindow(title)
                 ToggleLabel.Size = UDim2.new(1, -60, 1, 0)
                 ToggleLabel.BackgroundTransparency = 1
                 ToggleLabel.Text = toggleText
-                ToggleLabel.TextColor3 = self.Theme.TextPrimary
-                ToggleLabel.TextSize = self.Theme.FontSizeBody
-                ToggleLabel.Font = self.Theme.Font
+                ToggleLabel.TextColor3 = LibTheme.TextPrimary
+                ToggleLabel.TextSize = LibTheme.FontSizeBody
+                ToggleLabel.Font = LibTheme.Font
                 ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
                 ToggleLabel.Parent = ToggleContainer
                 
@@ -575,7 +579,7 @@ function CustomUILib:CreateWindow(title)
                 ToggleBackground.Name = "Background"
                 ToggleBackground.Size = UDim2.new(0, 50, 0, 25)
                 ToggleBackground.Position = UDim2.new(1, -50, 0.5, -12.5)
-                ToggleBackground.BackgroundColor3 = self.Theme.BackgroundTertiary
+                ToggleBackground.BackgroundColor3 = LibTheme.BackgroundTertiary
                 ToggleBackground.BorderSizePixel = 0
                 ToggleBackground.Parent = ToggleContainer
                 
@@ -589,7 +593,7 @@ function CustomUILib:CreateWindow(title)
                 ToggleHandle.Name = "Handle"
                 ToggleHandle.Size = UDim2.new(0, 21, 0, 21)
                 ToggleHandle.Position = UDim2.new(0, 2, 0.5, -10.5)
-                ToggleHandle.BackgroundColor3 = self.Theme.TextPrimary
+                ToggleHandle.BackgroundColor3 = LibTheme.TextPrimary
                 ToggleHandle.BorderSizePixel = 0
                 ToggleHandle.Parent = ToggleBackground
                 
@@ -612,10 +616,10 @@ function CustomUILib:CreateWindow(title)
                 -- Update Toggle Appearance
                 local function UpdateToggle()
                     if Toggled then
-                        TweenService:Create(ToggleBackground, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.AccentPrimary}):Play()
+                        TweenService:Create(ToggleBackground, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.AccentPrimary}):Play()
                         TweenService:Create(ToggleHandle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10.5)}):Play()
                     else
-                        TweenService:Create(ToggleBackground, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.BackgroundTertiary}):Play()
+                        TweenService:Create(ToggleBackground, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.BackgroundTertiary}):Play()
                         TweenService:Create(ToggleHandle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10.5)}):Play()
                     end
                     
@@ -671,9 +675,9 @@ function CustomUILib:CreateWindow(title)
                 SliderLabel.Size = UDim2.new(1, 0, 0, 25)
                 SliderLabel.BackgroundTransparency = 1
                 SliderLabel.Text = sliderText
-                SliderLabel.TextColor3 = self.Theme.TextPrimary
-                SliderLabel.TextSize = self.Theme.FontSizeBody
-                SliderLabel.Font = self.Theme.Font
+                SliderLabel.TextColor3 = LibTheme.TextPrimary
+                SliderLabel.TextSize = LibTheme.FontSizeBody
+                SliderLabel.Font = LibTheme.Font
                 SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
                 SliderLabel.Parent = SliderContainer
                 
@@ -684,9 +688,9 @@ function CustomUILib:CreateWindow(title)
                 SliderValue.Position = UDim2.new(1, -50, 0, 0)
                 SliderValue.BackgroundTransparency = 1
                 SliderValue.Text = tostring(default)
-                SliderValue.TextColor3 = self.Theme.TextSecondary
-                SliderValue.TextSize = self.Theme.FontSizeBody
-                SliderValue.Font = self.Theme.Font
+                SliderValue.TextColor3 = LibTheme.TextSecondary
+                SliderValue.TextSize = LibTheme.FontSizeBody
+                SliderValue.Font = LibTheme.Font
                 SliderValue.TextXAlignment = Enum.TextXAlignment.Right
                 SliderValue.Parent = SliderContainer
                 
@@ -695,7 +699,7 @@ function CustomUILib:CreateWindow(title)
                 SliderBackground.Name = "Background"
                 SliderBackground.Size = UDim2.new(1, 0, 0, 10)
                 SliderBackground.Position = UDim2.new(0, 0, 0, 35)
-                SliderBackground.BackgroundColor3 = self.Theme.BackgroundTertiary
+                SliderBackground.BackgroundColor3 = LibTheme.BackgroundTertiary
                 SliderBackground.BorderSizePixel = 0
                 SliderBackground.Parent = SliderContainer
                 
@@ -708,7 +712,7 @@ function CustomUILib:CreateWindow(title)
                 local SliderFill = Instance.new("Frame")
                 SliderFill.Name = "Fill"
                 SliderFill.Size = UDim2.new(0, 0, 1, 0)
-                SliderFill.BackgroundColor3 = self.Theme.AccentPrimary
+                SliderFill.BackgroundColor3 = LibTheme.AccentPrimary
                 SliderFill.BorderSizePixel = 0
                 SliderFill.Parent = SliderBackground
                 
@@ -722,7 +726,7 @@ function CustomUILib:CreateWindow(title)
                 SliderHandle.Name = "Handle"
                 SliderHandle.Size = UDim2.new(0, 16, 0, 16)
                 SliderHandle.Position = UDim2.new(0, 0, 0.5, -8)
-                SliderHandle.BackgroundColor3 = self.Theme.TextPrimary
+                SliderHandle.BackgroundColor3 = LibTheme.TextPrimary
                 SliderHandle.BorderSizePixel = 0
                 SliderHandle.ZIndex = 2
                 SliderHandle.Parent = SliderFill
@@ -768,7 +772,7 @@ function CustomUILib:CreateWindow(title)
                     Dragging = true
                     
                     -- Change handle color
-                    TweenService:Create(SliderHandle, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.AccentSecondary}):Play()
+                    TweenService:Create(SliderHandle, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.AccentSecondary}):Play()
                     
                     -- Update slider based on mouse position
                     local function Update()
@@ -809,7 +813,7 @@ function CustomUILib:CreateWindow(title)
                             Dragging = false
                             
                             -- Restore handle color
-                            TweenService:Create(SliderHandle, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.TextPrimary}):Play()
+                            TweenService:Create(SliderHandle, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.TextPrimary}):Play()
                             
                             -- Disconnect events
                             MoveConnection:Disconnect()
@@ -854,9 +858,9 @@ function CustomUILib:CreateWindow(title)
                 DropdownLabel.Size = UDim2.new(1, 0, 0, 20)
                 DropdownLabel.BackgroundTransparency = 1
                 DropdownLabel.Text = dropdownText
-                DropdownLabel.TextColor3 = self.Theme.TextPrimary
-                DropdownLabel.TextSize = self.Theme.FontSizeBody
-                DropdownLabel.Font = self.Theme.Font
+                DropdownLabel.TextColor3 = LibTheme.TextPrimary
+                DropdownLabel.TextSize = LibTheme.FontSizeBody
+                DropdownLabel.Font = LibTheme.Font
                 DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
                 DropdownLabel.Parent = DropdownContainer
                 
@@ -865,12 +869,12 @@ function CustomUILib:CreateWindow(title)
                 DropdownButton.Name = "Button"
                 DropdownButton.Size = UDim2.new(1, 0, 0, 30)
                 DropdownButton.Position = UDim2.new(0, 0, 0, 20)
-                DropdownButton.BackgroundColor3 = self.Theme.BackgroundTertiary
+                DropdownButton.BackgroundColor3 = LibTheme.BackgroundTertiary
                 DropdownButton.BorderSizePixel = 0
                 DropdownButton.Text = default or "Select..."
-                DropdownButton.TextColor3 = self.Theme.TextPrimary
-                DropdownButton.TextSize = self.Theme.FontSizeBody
-                DropdownButton.Font = self.Theme.Font
+                DropdownButton.TextColor3 = LibTheme.TextPrimary
+                DropdownButton.TextSize = LibTheme.FontSizeBody
+                DropdownButton.Font = LibTheme.Font
                 DropdownButton.TextXAlignment = Enum.TextXAlignment.Left
                 DropdownButton.TextTruncate = Enum.TextTruncate.AtEnd
                 DropdownButton.AutoButtonColor = false
@@ -893,7 +897,7 @@ function CustomUILib:CreateWindow(title)
                 DropdownArrow.Position = UDim2.new(1, -25, 0.5, -10)
                 DropdownArrow.BackgroundTransparency = 1
                 DropdownArrow.Image = "rbxassetid://6031091004"
-                DropdownArrow.ImageColor3 = self.Theme.TextSecondary
+                DropdownArrow.ImageColor3 = LibTheme.TextSecondary
                 DropdownArrow.Parent = DropdownButton
                 
                 -- Dropdown Menu
@@ -901,11 +905,11 @@ function CustomUILib:CreateWindow(title)
                 DropdownMenu.Name = "Menu"
                 DropdownMenu.Size = UDim2.new(1, 0, 0, 0)
                 DropdownMenu.Position = UDim2.new(0, 0, 1, 5)
-                DropdownMenu.BackgroundColor3 = self.Theme.BackgroundTertiary
+                DropdownMenu.BackgroundColor3 = LibTheme.BackgroundTertiary
                 DropdownMenu.BorderSizePixel = 0
                 DropdownMenu.ClipsDescendants = true
                 DropdownMenu.Visible = false
-                DropdownMenu.ZIndex = self.Theme.ZIndexOrder.Dropdown
+                DropdownMenu.ZIndex = LibTheme.ZIndexOrder.Dropdown
                 DropdownMenu.Parent = DropdownButton
                 
                 -- Dropdown Menu Corner Radius
@@ -920,8 +924,8 @@ function CustomUILib:CreateWindow(title)
                 DropdownMenuList.BackgroundTransparency = 1
                 DropdownMenuList.BorderSizePixel = 0
                 DropdownMenuList.ScrollBarThickness = 2
-                DropdownMenuList.ScrollBarImageColor3 = self.Theme.AccentPrimary
-                DropdownMenuList.ZIndex = self.Theme.ZIndexOrder.Dropdown
+                DropdownMenuList.ScrollBarImageColor3 = LibTheme.AccentPrimary
+                DropdownMenuList.ZIndex = LibTheme.ZIndexOrder.Dropdown
                 DropdownMenuList.Parent = DropdownMenu
                 
                 -- Dropdown Menu List Layout
@@ -971,15 +975,15 @@ function CustomUILib:CreateWindow(title)
                         local OptionButton = Instance.new("TextButton")
                         OptionButton.Name = "Option_" .. i
                         OptionButton.Size = UDim2.new(1, 0, 0, 30)
-                        OptionButton.BackgroundColor3 = self.Theme.BackgroundTertiary
+                        OptionButton.BackgroundColor3 = LibTheme.BackgroundTertiary
                         OptionButton.BorderSizePixel = 0
                         OptionButton.Text = option
-                        OptionButton.TextColor3 = option == Selected and self.Theme.AccentPrimary or self.Theme.TextPrimary
-                        OptionButton.TextSize = self.Theme.FontSizeBody
-                        OptionButton.Font = self.Theme.Font
+                        OptionButton.TextColor3 = option == Selected and LibTheme.AccentPrimary or LibTheme.TextPrimary
+                        OptionButton.TextSize = LibTheme.FontSizeBody
+                        OptionButton.Font = LibTheme.Font
                         OptionButton.TextXAlignment = Enum.TextXAlignment.Left
                         OptionButton.AutoButtonColor = false
-                        OptionButton.ZIndex = self.Theme.ZIndexOrder.Dropdown
+                        OptionButton.ZIndex = LibTheme.ZIndexOrder.Dropdown
                         OptionButton.Parent = DropdownMenuList
                         
                         -- Option Button Padding
@@ -995,13 +999,13 @@ function CustomUILib:CreateWindow(title)
                         -- Option Button Functionality
                         OptionButton.MouseEnter:Connect(function()
                             if option ~= Selected then
-                                TweenService:Create(OptionButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.BackgroundSecondary}):Play()
+                                TweenService:Create(OptionButton, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.BackgroundSecondary}):Play()
                             end
                         end)
                         
                         OptionButton.MouseLeave:Connect(function()
                             if option ~= Selected then
-                                TweenService:Create(OptionButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.BackgroundTertiary}):Play()
+                                TweenService:Create(OptionButton, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.BackgroundTertiary}):Play()
                             end
                         end)
                         
@@ -1018,8 +1022,8 @@ function CustomUILib:CreateWindow(title)
                             -- Update option colors
                             for _, child in pairs(DropdownMenuList:GetChildren()) do
                                 if child:IsA("TextButton") then
-                                    child.TextColor3 = child.Text == Selected and self.Theme.AccentPrimary or self.Theme.TextPrimary
-                                    child.BackgroundColor3 = self.Theme.BackgroundTertiary
+                                    child.TextColor3 = child.Text == Selected and LibTheme.AccentPrimary or LibTheme.TextPrimary
+                                    child.BackgroundColor3 = LibTheme.BackgroundTertiary
                                 end
                             end
                             
@@ -1037,11 +1041,11 @@ function CustomUILib:CreateWindow(title)
                 
                 -- Dropdown Button Functionality
                 DropdownButton.MouseEnter:Connect(function()
-                    TweenService:Create(DropdownButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.BackgroundSecondary}):Play()
+                    TweenService:Create(DropdownButton, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.BackgroundSecondary}):Play()
                 end)
                 
                 DropdownButton.MouseLeave:Connect(function()
-                    TweenService:Create(DropdownButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.BackgroundTertiary}):Play()
+                    TweenService:Create(DropdownButton, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.BackgroundTertiary}):Play()
                 end)
                 
                 DropdownButton.MouseButton1Click:Connect(function()
@@ -1102,7 +1106,7 @@ function CustomUILib:CreateWindow(title)
                         -- Update option colors
                         for _, child in pairs(DropdownMenuList:GetChildren()) do
                             if child:IsA("TextButton") then
-                                child.TextColor3 = child.Text == Selected and self.Theme.AccentPrimary or self.Theme.TextPrimary
+                                child.TextColor3 = child.Text == Selected and LibTheme.AccentPrimary or LibTheme.TextPrimary
                             end
                         end
                         
@@ -1148,9 +1152,9 @@ function CustomUILib:CreateWindow(title)
                 ColorPickerLabel.Size = UDim2.new(1, -60, 1, 0)
                 ColorPickerLabel.BackgroundTransparency = 1
                 ColorPickerLabel.Text = colorText
-                ColorPickerLabel.TextColor3 = self.Theme.TextPrimary
-                ColorPickerLabel.TextSize = self.Theme.FontSizeBody
-                ColorPickerLabel.Font = self.Theme.Font
+                ColorPickerLabel.TextColor3 = LibTheme.TextPrimary
+                ColorPickerLabel.TextSize = LibTheme.FontSizeBody
+                ColorPickerLabel.Font = LibTheme.Font
                 ColorPickerLabel.TextXAlignment = Enum.TextXAlignment.Left
                 ColorPickerLabel.Parent = ColorPickerContainer
                 
@@ -1181,10 +1185,10 @@ function CustomUILib:CreateWindow(title)
                 ColorPickerMenu.Name = "Menu"
                 ColorPickerMenu.Size = UDim2.new(0, 200, 0, 220)
                 ColorPickerMenu.Position = UDim2.new(1, -200, 1, 10)
-                ColorPickerMenu.BackgroundColor3 = self.Theme.BackgroundSecondary
+                ColorPickerMenu.BackgroundColor3 = LibTheme.BackgroundSecondary
                 ColorPickerMenu.BorderSizePixel = 0
                 ColorPickerMenu.Visible = false
-                ColorPickerMenu.ZIndex = self.Theme.ZIndexOrder.ColorPicker
+                ColorPickerMenu.ZIndex = LibTheme.ZIndexOrder.ColorPicker
                 ColorPickerMenu.Parent = ColorPickerContainer
                 
                 -- Color Picker Menu Corner Radius
@@ -1198,10 +1202,10 @@ function CustomUILib:CreateWindow(title)
                 ColorPickerTitle.Size = UDim2.new(1, 0, 0, 30)
                 ColorPickerTitle.BackgroundTransparency = 1
                 ColorPickerTitle.Text = "Color Picker"
-                ColorPickerTitle.TextColor3 = self.Theme.TextPrimary
-                ColorPickerTitle.TextSize = self.Theme.FontSizeSubheader
-                ColorPickerTitle.Font = self.Theme.Font
-                ColorPickerTitle.ZIndex = self.Theme.ZIndexOrder.ColorPicker
+                ColorPickerTitle.TextColor3 = LibTheme.TextPrimary
+                ColorPickerTitle.TextSize = LibTheme.FontSizeSubheader
+                ColorPickerTitle.Font = LibTheme.Font
+                ColorPickerTitle.ZIndex = LibTheme.ZIndexOrder.ColorPicker
                 ColorPickerTitle.Parent = ColorPickerMenu
                 
                 -- Color Picker Close Button
@@ -1209,12 +1213,12 @@ function CustomUILib:CreateWindow(title)
                 ColorPickerCloseBtn.Name = "CloseButton"
                 ColorPickerCloseBtn.Size = UDim2.new(0, 20, 0, 20)
                 ColorPickerCloseBtn.Position = UDim2.new(1, -25, 0, 5)
-                ColorPickerCloseBtn.BackgroundColor3 = self.Theme.Error
+                ColorPickerCloseBtn.BackgroundColor3 = LibTheme.Error
                 ColorPickerCloseBtn.Text = "X"
-                ColorPickerCloseBtn.TextColor3 = self.Theme.TextPrimary
-                ColorPickerCloseBtn.TextSize = self.Theme.FontSizeSmall
-                ColorPickerCloseBtn.Font = self.Theme.Font
-                ColorPickerCloseBtn.ZIndex = self.Theme.ZIndexOrder.ColorPicker
+                ColorPickerCloseBtn.TextColor3 = LibTheme.TextPrimary
+                ColorPickerCloseBtn.TextSize = LibTheme.FontSizeSmall
+                ColorPickerCloseBtn.Font = LibTheme.Font
+                ColorPickerCloseBtn.ZIndex = LibTheme.ZIndexOrder.ColorPicker
                 ColorPickerCloseBtn.AutoButtonColor = false
                 ColorPickerCloseBtn.Parent = ColorPickerMenu
                 
@@ -1229,7 +1233,7 @@ function CustomUILib:CreateWindow(title)
                 ColorPickerContent.Size = UDim2.new(1, -20, 1, -40)
                 ColorPickerContent.Position = UDim2.new(0, 10, 0, 30)
                 ColorPickerContent.BackgroundTransparency = 1
-                ColorPickerContent.ZIndex = self.Theme.ZIndexOrder.ColorPicker
+                ColorPickerContent.ZIndex = LibTheme.ZIndexOrder.ColorPicker
                 ColorPickerContent.Parent = ColorPickerMenu
                 
                 -- Color Picker Variables
@@ -1248,7 +1252,7 @@ function CustomUILib:CreateWindow(title)
                 end)
                 
                 ColorPickerCloseBtn.MouseLeave:Connect(function()
-                    TweenService:Create(ColorPickerCloseBtn, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.Error}):Play()
+                    TweenService:Create(ColorPickerCloseBtn, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.Error}):Play()
                 end)
                 
                 ColorPickerCloseBtn.MouseButton1Click:Connect(function()
@@ -1311,9 +1315,9 @@ function CustomUILib:CreateWindow(title)
                 Label.Size = UDim2.new(1, 0, 1, 0)
                 Label.BackgroundTransparency = 1
                 Label.Text = labelText
-                Label.TextColor3 = self.Theme.TextSecondary
-                Label.TextSize = self.Theme.FontSizeBody
-                Label.Font = self.Theme.Font
+                Label.TextColor3 = LibTheme.TextSecondary
+                Label.TextSize = LibTheme.FontSizeBody
+                Label.Font = LibTheme.Font
                 Label.TextWrapped = true
                 Label.Parent = LabelContainer
                 
@@ -1346,7 +1350,7 @@ function CustomUILib:CreateWindow(title)
                 DividerLine.Name = "Line"
                 DividerLine.Size = UDim2.new(1, 0, 0, 1)
                 DividerLine.Position = UDim2.new(0, 0, 0.5, 0)
-                DividerLine.BackgroundColor3 = self.Theme.BorderSecondary
+                DividerLine.BackgroundColor3 = LibTheme.BorderSecondary
                 DividerLine.BorderSizePixel = 0
                 DividerLine.Parent = DividerContainer
                 
@@ -1373,9 +1377,9 @@ function CustomUILib:CreateWindow(title)
                 TextboxLabel.Size = UDim2.new(1, 0, 0, 20)
                 TextboxLabel.BackgroundTransparency = 1
                 TextboxLabel.Text = boxText
-                TextboxLabel.TextColor3 = self.Theme.TextPrimary
-                TextboxLabel.TextSize = self.Theme.FontSizeBody
-                TextboxLabel.Font = self.Theme.Font
+                TextboxLabel.TextColor3 = LibTheme.TextPrimary
+                TextboxLabel.TextSize = LibTheme.FontSizeBody
+                TextboxLabel.Font = LibTheme.Font
                 TextboxLabel.TextXAlignment = Enum.TextXAlignment.Left
                 TextboxLabel.Parent = TextboxContainer
                 
@@ -1384,7 +1388,7 @@ function CustomUILib:CreateWindow(title)
                 TextboxBackground.Name = "Background"
                 TextboxBackground.Size = UDim2.new(1, 0, 0, 30)
                 TextboxBackground.Position = UDim2.new(0, 0, 0, 20)
-                TextboxBackground.BackgroundColor3 = self.Theme.BackgroundTertiary
+                TextboxBackground.BackgroundColor3 = LibTheme.BackgroundTertiary
                 TextboxBackground.BorderSizePixel = 0
                 TextboxBackground.Parent = TextboxContainer
                 
@@ -1401,21 +1405,21 @@ function CustomUILib:CreateWindow(title)
                 Textbox.BackgroundTransparency = 1
                 Textbox.Text = default
                 Textbox.PlaceholderText = placeholderText
-                Textbox.TextColor3 = self.Theme.TextPrimary
-                Textbox.PlaceholderColor3 = self.Theme.TextDisabled
-                Textbox.TextSize = self.Theme.FontSizeBody
-                Textbox.Font = self.Theme.Font
+                Textbox.TextColor3 = LibTheme.TextPrimary
+                Textbox.PlaceholderColor3 = LibTheme.TextDisabled
+                Textbox.TextSize = LibTheme.FontSizeBody
+                Textbox.Font = LibTheme.Font
                 Textbox.TextXAlignment = Enum.TextXAlignment.Left
                 Textbox.ClearTextOnFocus = false
                 Textbox.Parent = TextboxBackground
                 
                 -- Textbox Functionality
                 Textbox.Focused:Connect(function()
-                    TweenService:Create(TextboxBackground, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.BackgroundSecondary}):Play()
+                    TweenService:Create(TextboxBackground, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.BackgroundSecondary}):Play()
                 end)
                 
                 Textbox.FocusLost:Connect(function(enterPressed)
-                    TweenService:Create(TextboxBackground, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.BackgroundTertiary}):Play()
+                    TweenService:Create(TextboxBackground, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.BackgroundTertiary}):Play()
                     callback(Textbox.Text, enterPressed)
                 end)
                 
@@ -1448,13 +1452,13 @@ function CustomUILib:CreateWindow(title)
         -- Determine notification color based on type
         local notificationColor
         if notificationType == "Success" then
-            notificationColor = self.Theme.Success
+            notificationColor = LibTheme.Success
         elseif notificationType == "Warning" then
-            notificationColor = self.Theme.Warning
+            notificationColor = LibTheme.Warning
         elseif notificationType == "Error" then
-            notificationColor = self.Theme.Error
+            notificationColor = LibTheme.Error
         else
-            notificationColor = self.Theme.Info
+            notificationColor = LibTheme.Info
         end
         
         -- Notification Container
@@ -1462,9 +1466,9 @@ function CustomUILib:CreateWindow(title)
         NotificationContainer.Name = "Notification"
         NotificationContainer.Size = UDim2.new(0, 300, 0, 80)
         NotificationContainer.Position = UDim2.new(1, -320, 1, -100)
-        NotificationContainer.BackgroundColor3 = self.Theme.BackgroundSecondary
+        NotificationContainer.BackgroundColor3 = LibTheme.BackgroundSecondary
         NotificationContainer.BorderSizePixel = 0
-        NotificationContainer.ZIndex = self.Theme.ZIndexOrder.Notification
+        NotificationContainer.ZIndex = LibTheme.ZIndexOrder.Notification
         NotificationContainer.Parent = game.CoreGui
         
         -- Notification Container Corner Radius
@@ -1478,7 +1482,7 @@ function CustomUILib:CreateWindow(title)
         NotificationIndicator.Size = UDim2.new(0, 5, 1, 0)
         NotificationIndicator.BackgroundColor3 = notificationColor
         NotificationIndicator.BorderSizePixel = 0
-        NotificationIndicator.ZIndex = self.Theme.ZIndexOrder.Notification
+        NotificationIndicator.ZIndex = LibTheme.ZIndexOrder.Notification
         NotificationIndicator.Parent = NotificationContainer
         
         -- Notification Indicator Corner Radius
@@ -1493,7 +1497,7 @@ function CustomUILib:CreateWindow(title)
         NotificationIndicatorFix.Position = UDim2.new(0.5, 0, 0, 0)
         NotificationIndicatorFix.BackgroundColor3 = notificationColor
         NotificationIndicatorFix.BorderSizePixel = 0
-        NotificationIndicatorFix.ZIndex = self.Theme.ZIndexOrder.Notification
+        NotificationIndicatorFix.ZIndex = LibTheme.ZIndexOrder.Notification
         NotificationIndicatorFix.Parent = NotificationIndicator
         
         -- Notification Content
@@ -1502,7 +1506,7 @@ function CustomUILib:CreateWindow(title)
         NotificationContent.Size = UDim2.new(1, -15, 1, 0)
         NotificationContent.Position = UDim2.new(0, 15, 0, 0)
         NotificationContent.BackgroundTransparency = 1
-        NotificationContent.ZIndex = self.Theme.ZIndexOrder.Notification
+        NotificationContent.ZIndex = LibTheme.ZIndexOrder.Notification
         NotificationContent.Parent = NotificationContainer
         
         -- Notification Title
@@ -1512,11 +1516,11 @@ function CustomUILib:CreateWindow(title)
         NotificationTitle.Position = UDim2.new(0, 10, 0, 5)
         NotificationTitle.BackgroundTransparency = 1
         NotificationTitle.Text = title
-        NotificationTitle.TextColor3 = self.Theme.TextPrimary
-        NotificationTitle.TextSize = self.Theme.FontSizeSubheader
-        NotificationTitle.Font = self.Theme.Font
+        NotificationTitle.TextColor3 = LibTheme.TextPrimary
+        NotificationTitle.TextSize = LibTheme.FontSizeSubheader
+        NotificationTitle.Font = LibTheme.Font
         NotificationTitle.TextXAlignment = Enum.TextXAlignment.Left
-        NotificationTitle.ZIndex = self.Theme.ZIndexOrder.Notification
+        NotificationTitle.ZIndex = LibTheme.ZIndexOrder.Notification
         NotificationTitle.Parent = NotificationContent
         
         -- Notification Message
@@ -1526,13 +1530,13 @@ function CustomUILib:CreateWindow(title)
         NotificationMessage.Position = UDim2.new(0, 10, 0, 30)
         NotificationMessage.BackgroundTransparency = 1
         NotificationMessage.Text = message
-        NotificationMessage.TextColor3 = self.Theme.TextSecondary
-        NotificationMessage.TextSize = self.Theme.FontSizeBody
-        NotificationMessage.Font = self.Theme.Font
+        NotificationMessage.TextColor3 = LibTheme.TextSecondary
+        NotificationMessage.TextSize = LibTheme.FontSizeBody
+        NotificationMessage.Font = LibTheme.Font
         NotificationMessage.TextXAlignment = Enum.TextXAlignment.Left
         NotificationMessage.TextYAlignment = Enum.TextYAlignment.Top
         NotificationMessage.TextWrapped = true
-        NotificationMessage.ZIndex = self.Theme.ZIndexOrder.Notification
+        NotificationMessage.ZIndex = LibTheme.ZIndexOrder.Notification
         NotificationMessage.Parent = NotificationContent
         
         -- Notification Close Button
@@ -1540,12 +1544,12 @@ function CustomUILib:CreateWindow(title)
         NotificationCloseBtn.Name = "CloseButton"
         NotificationCloseBtn.Size = UDim2.new(0, 20, 0, 20)
         NotificationCloseBtn.Position = UDim2.new(1, -25, 0, 5)
-        NotificationCloseBtn.BackgroundColor3 = self.Theme.Error
+        NotificationCloseBtn.BackgroundColor3 = LibTheme.Error
         NotificationCloseBtn.Text = "X"
-        NotificationCloseBtn.TextColor3 = self.Theme.TextPrimary
-        NotificationCloseBtn.TextSize = self.Theme.FontSizeSmall
-        NotificationCloseBtn.Font = self.Theme.Font
-        NotificationCloseBtn.ZIndex = self.Theme.ZIndexOrder.Notification
+        NotificationCloseBtn.TextColor3 = LibTheme.TextPrimary
+        NotificationCloseBtn.TextSize = LibTheme.FontSizeSmall
+        NotificationCloseBtn.Font = LibTheme.Font
+        NotificationCloseBtn.ZIndex = LibTheme.ZIndexOrder.Notification
         NotificationCloseBtn.AutoButtonColor = false
         NotificationCloseBtn.Parent = NotificationContainer
         
@@ -1559,9 +1563,9 @@ function CustomUILib:CreateWindow(title)
         NotificationProgressBg.Name = "ProgressBackground"
         NotificationProgressBg.Size = UDim2.new(1, 0, 0, 5)
         NotificationProgressBg.Position = UDim2.new(0, 0, 1, -5)
-        NotificationProgressBg.BackgroundColor3 = self.Theme.BackgroundTertiary
+        NotificationProgressBg.BackgroundColor3 = LibTheme.BackgroundTertiary
         NotificationProgressBg.BorderSizePixel = 0
-        NotificationProgressBg.ZIndex = self.Theme.ZIndexOrder.Notification
+        NotificationProgressBg.ZIndex = LibTheme.ZIndexOrder.Notification
         NotificationProgressBg.Parent = NotificationContainer
         
         -- Notification Progress Bar
@@ -1570,7 +1574,7 @@ function CustomUILib:CreateWindow(title)
         NotificationProgress.Size = UDim2.new(1, 0, 1, 0)
         NotificationProgress.BackgroundColor3 = notificationColor
         NotificationProgress.BorderSizePixel = 0
-        NotificationProgress.ZIndex = self.Theme.ZIndexOrder.Notification
+        NotificationProgress.ZIndex = LibTheme.ZIndexOrder.Notification
         NotificationProgress.Parent = NotificationProgressBg
         
         -- Notification Animation
@@ -1586,7 +1590,7 @@ function CustomUILib:CreateWindow(title)
         end)
         
         NotificationCloseBtn.MouseLeave:Connect(function()
-            TweenService:Create(NotificationCloseBtn, TweenInfo.new(0.2), {BackgroundColor3 = self.Theme.Error}):Play()
+            TweenService:Create(NotificationCloseBtn, TweenInfo.new(0.2), {BackgroundColor3 = LibTheme.Error}):Play()
         end)
         
         NotificationCloseBtn.MouseButton1Click:Connect(function()
